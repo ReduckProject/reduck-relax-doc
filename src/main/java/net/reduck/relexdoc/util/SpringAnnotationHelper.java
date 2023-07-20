@@ -1,5 +1,6 @@
 package net.reduck.relexdoc.util;
 
+import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
@@ -17,9 +18,10 @@ import java.util.Set;
  * @author Reduck
  * @since 2022/12/12 09:24
  */
-public class SpringMappingHelper {
+public class SpringAnnotationHelper {
     private static Set<String> controllerClassNameSet = new HashSet<>();
     private static Set<String> requestMappingClassNameSet = new HashSet<>();
+    private static Set<String> requestBodyClassNameSet = new HashSet<>();
 
     static {
         controllerClassNameSet.add("org.springframework.stereotype.Controller");
@@ -40,9 +42,11 @@ public class SpringMappingHelper {
         requestMappingClassNameSet.add("DeleteMapping");
         requestMappingClassNameSet.add("PatchMapping");
         requestMappingClassNameSet.add("PutMapping");
+
+        requestBodyClassNameSet.add("org.springframework.web.bind.annotation.RequestBody");
     }
 
-    public static boolean containController(JavaClass javaClass) {
+    public static boolean containsController(JavaClass javaClass) {
         for (JavaAnnotation javaAnnotation : javaClass.getAnnotations()) {
             if (controllerClassNameSet.contains(javaAnnotation.getType().getCanonicalName())) {
                 return true;
@@ -52,7 +56,7 @@ public class SpringMappingHelper {
         return false;
     }
 
-    public static boolean containRequestMapping(JavaMethod javaMethod) {
+    public static boolean containsRequestMapping(JavaMethod javaMethod) {
         for (JavaAnnotation javaAnnotation : javaMethod.getAnnotations()) {
             if (requestMappingClassNameSet.contains(javaAnnotation.getType().getCanonicalName())) {
                 return true;
@@ -62,13 +66,30 @@ public class SpringMappingHelper {
         return false;
     }
 
-    public static boolean containRequestMapping(JavaClass javaClass) {
+    public static boolean containsRequestMapping(JavaClass javaClass) {
         for (JavaAnnotation javaAnnotation : javaClass.getAnnotations()) {
             if (requestMappingClassNameSet.contains(javaAnnotation.getType().getCanonicalName())) {
                 return true;
             }
         }
+        return false;
+    }
 
+    public static JavaAnnotation getRequestMappingAnnotation(JavaAnnotatedElement annotatedElement) {
+        for (JavaAnnotation javaAnnotation : annotatedElement.getAnnotations()) {
+            if (requestMappingClassNameSet.contains(javaAnnotation.getType().getCanonicalName())) {
+               return javaAnnotation;
+            }
+        }
+        return null;
+    }
+
+    public static boolean containsRequestBody(JavaAnnotatedElement annotatedElement) {
+        for (JavaAnnotation javaAnnotation : annotatedElement.getAnnotations()) {
+            if (requestBodyClassNameSet.contains(javaAnnotation.getType().getCanonicalName())) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -88,6 +109,10 @@ public class SpringMappingHelper {
             }
         }
         return "";
+    }
+
+    public static String getUrl(JavaAnnotatedElement element) {
+        return getUrl(element.getAnnotations());
     }
 
     public static String mappingNormalize(JavaAnnotation javaAnnotation) {
@@ -124,9 +149,19 @@ public class SpringMappingHelper {
         return mappingNormalize(value.toString());
     }
 
-    public static boolean containAnnotation(List<JavaAnnotation> annotationList, Class<?> annotationType) {
+    public static boolean containsAnnotation(List<JavaAnnotation> annotationList, String annotationName) {
         for (JavaAnnotation annotation : annotationList) {
-            if (annotation.getType().getCanonicalName().equals(annotationType.getCanonicalName())) {
+            if (annotation.getType().getCanonicalName().equals(annotationName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean containsAnnotation(JavaAnnotatedElement annotatedElement, String annotationName) {
+        for (JavaAnnotation annotation : annotatedElement.getAnnotations()) {
+            if (annotation.getType().getCanonicalName().equals(annotationName)) {
                 return true;
             }
         }

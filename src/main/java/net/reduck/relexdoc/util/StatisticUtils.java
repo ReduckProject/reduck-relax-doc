@@ -29,18 +29,18 @@ public class StatisticUtils {
             if(!javaClass.getName().toLowerCase().contains("controller")) {
                 continue;
             }
-            if (!SpringMappingHelper.containController(javaClass)) {
+            if (!SpringAnnotationHelper.containsController(javaClass)) {
                 System.out.println("Skip :" + javaClass.getCanonicalName());
                 continue;
             }
 
             System.out.println(javaClass.getCanonicalName());
-            String prefix = SpringMappingHelper.getUrl(javaClass.getAnnotations());
+            String prefix = SpringAnnotationHelper.getUrl(javaClass.getAnnotations());
             for (JavaMethod javaMethod : javaClass.getMethods()) {
-                if (!SpringMappingHelper.containRequestMapping(javaMethod)) {
+                if (!SpringAnnotationHelper.containsRequestMapping(javaMethod)) {
                     continue;
                 }
-                String suffix = SpringMappingHelper.getUrl(javaMethod.getAnnotations());
+                String suffix = SpringAnnotationHelper.getUrl(javaMethod.getAnnotations());
                 urls.add(prefix + suffix);
             }
         }
