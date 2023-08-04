@@ -5,9 +5,9 @@ import org.beetl.core.Function;
 
 /**
  * @author Gin
- * @since 2023/7/20 20:19
+ * @since 2023/8/4 16:45
  */
-public class HtmlLineEscape implements Function {
+public class HtmlSpaceEscape implements Function {
 
     @Override
     public Object call(Object[] paras, Context ctx) {
@@ -15,6 +15,9 @@ public class HtmlLineEscape implements Function {
         if(para0 == null){
             return "";
         }
-        return para0.toString().replace("\n", "<br>");
+        // 将换行替换成<br>
+        return para0.toString()
+                .replaceAll(" ", "&nbsp;")
+                ;
     }
 }

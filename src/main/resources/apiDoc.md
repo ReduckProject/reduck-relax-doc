@@ -22,7 +22,7 @@ if(isNotEmpty(requestParams)){
 <%
 for(requestParam in requestParams){
 %>
-|${requestParam.name}|${requestParam.type}|${requestParam.requireDesc}|${requestParam.constraintDesc}|${htmlLineEscape(requestParam.desc)}|${htmlLineEscape(requestParam.example)}|
+|${htmlSpaceEscape(requestParam.name)}|${requestParam.type}|${requestParam.requireDesc}|${requestParam.constraintDesc}|${htmlLineSeparatorEscape(requestParam.desc)}|${htmlLineSeparatorEscape(requestParam.example)}|
 <% } %>
 <% } else {%>
 * 无
@@ -37,7 +37,7 @@ if(isNotEmpty(responseParams)) {
 <%
 for(responseParam in responseParams){
 %>
-|${responseParam.name}|${responseParam.type}|${responseParam.requireDesc}|${responseParam.constraintDesc}|${htmlLineEscape(responseParam.desc)}|${htmlLineEscape(responseParam.example)}|
+|${htmlSpaceEscape(responseParam.name)}|${responseParam.type}|${responseParam.requireDesc}|${responseParam.constraintDesc}|${htmlLineSeparatorEscape(responseParam.desc)}|${htmlLineSeparatorEscape(responseParam.example)}|
 <% } %>
 <% } else {%>
 * 无

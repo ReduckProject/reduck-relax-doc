@@ -9,17 +9,14 @@ import net.reduck.relexdoc.template.TemplateWriter;
 import net.reduck.relexdoc.util.ProjectBuilderLoader;
 import net.reduck.relexdoc.util.SpringAnnotationHelper;
 import net.reduck.relexdoc.util.SpringMvcApiParser;
-import org.beetl.core.Configuration;
-import org.beetl.core.GroupTemplate;
-import org.beetl.core.Template;
-import org.beetl.core.resource.StringTemplateResourceLoader;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Gin

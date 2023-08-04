@@ -16,6 +16,8 @@ public class RelaxApiParameter {
 
     private String requireDesc;
 
+    private Boolean required;
+
     private String constraintDesc;
 
     private String desc;

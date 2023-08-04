@@ -4,7 +4,6 @@ import com.thoughtworks.qdox.model.*;
 import net.reduck.relexdoc.entity.RelaxApiParameter;
 import net.reduck.relexdoc.utils.JavaTypeHelper;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import java.util.List;
  */
 public class SpringMvcApiParser {
     private static String nestedParameterPrefix = "└─ ";
+    private static String depthPrefix = "        ";
 
     public static String url(JavaAnnotatedElement element) {
         return SpringAnnotationHelper.getUrl(element);
@@ -39,9 +39,7 @@ public class SpringMvcApiParser {
                 return annotation.getProperty("method") == null
                         ? "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE"
                         : annotation.getProperty("method").toString()
-                        .replace("{", "")
-                        .replace("}", "")
-                        .replace("RequestMethod.", "");
+                        .replaceAll("\\{|}|RequestMethod", "");
 
             case "PostMapping":
                 return "POST";
@@ -60,22 +58,8 @@ public class SpringMvcApiParser {
     public static List<RelaxApiParameter> requestParameter(JavaMethod javaMethod) {
         List<RelaxApiParameter> requestParams = new ArrayList<>();
         List<JavaParameter> parameterList = javaMethod.getParameters();
-
         for (JavaParameter parameter : parameterList) {
-//            if (!JavaTypeHelper.isPrimitive(parameter.getName()) && !JavaTypeHelper.isCollection(parameter.getName())) {
-//                List<JavaField> fields = parameter.getJavaClass().getFields();
-//                for (JavaField field : fields) {
-//                    RelaxApiParameter requestParam = new RelaxApiParameter();
-//                    requestParam.setName(field.getName())
-//                            .setType(field.getType().getName())
-//                            .setDesc(field.getComment())
-//                            .setRequireDesc("是")
-//                            .setConstraintDesc("-")
-//                            .setExample("-");
-//                    requestParams.add(requestParam);
-//                }
-//            }
-            parameterParser(parameter, requestParams);
+            parameterParser(parameter, Jsr380Utils.annotationWithValid(javaMethod), requestParams);
         }
 
         return requestParams;
@@ -84,19 +68,6 @@ public class SpringMvcApiParser {
     public static List<RelaxApiParameter> responseParameter(JavaMethod javaMethod) {
         List<RelaxApiParameter> responseParams = new ArrayList<>();
         JavaClass returnClass = javaMethod.getReturns();
-//        if (!JavaTypeHelper.isPrimitive(returnClass.getName()) && !JavaTypeHelper.isCollection(returnClass.getName())) {
-//            List<JavaField> fields = returnClass.getFields();
-//            for (JavaField field : fields) {
-//                RelaxApiParameter requestParam = new RelaxApiParameter();
-//                requestParam.setName(field.getName())
-//                        .setType(field.getType().getName())
-//                        .setDesc(field.getComment())
-//                        .setRequireDesc("是")
-//                        .setConstraintDesc("-")
-//                        .setExample("-");
-//                responseParams.add(requestParam);
-//            }
-//        }
         parameterParser(returnClass, false, 0, responseParams);
         return responseParams;
     }
@@ -106,59 +77,87 @@ public class SpringMvcApiParser {
     }
 
     static void parameterParser(JavaParameter parameterClass, List<RelaxApiParameter> parameters) {
-        if(JavaTypeHelper.isPrimitive(parameterClass.getName())) {
-            parameters.add(buildParameter(parameterClass));
+        if (JavaTypeHelper.isPrimitive(parameterClass.getCanonicalName())) {
+            parameters.add(buildParameter(parameterClass,false,  0));
         }
 
-        if(JavaTypeHelper.isCollection(parameterClass.getName())){
-
+        if (JavaTypeHelper.isCollection(parameterClass.getCanonicalName())) {
+            System.out.println();
         }
 
         parameterParser(parameterClass.getJavaClass(), false, 0, parameters);
     }
 
-        static void parameterParser(JavaClass parameterClass, boolean validated, int deep, List<RelaxApiParameter> parameters) {
-        if (!JavaTypeHelper.isPrimitive(parameterClass.getName()) && !JavaTypeHelper.isCollection(parameterClass.getName())) {
+    static void parameterParser(JavaParameter parameterClass, boolean validated, List<RelaxApiParameter> parameters) {
+        if (JavaTypeHelper.isPrimitive(parameterClass.getCanonicalName())) {
+            parameters.add(buildParameter(parameterClass,validated,  0));
+        }
+
+        if (JavaTypeHelper.isCollection(parameterClass.getCanonicalName())) {
+            System.out.println();
+        }
+
+        parameterParser(parameterClass.getJavaClass(), validated, 0, parameters);
+    }
+
+    static void parameterParser(JavaClass parameterClass, boolean validated, int deep, List<RelaxApiParameter> parameters) {
+        if (JavaTypeHelper.isCollection(parameterClass.getCanonicalName())) {
+            if (parameterClass instanceof JavaParameterizedType) {
+                JavaType javaType = ((JavaParameterizedType) parameterClass).getActualTypeArguments().get(0);
+
+                if (javaType instanceof JavaClass) {
+                    parameterParser((JavaClass) javaType, validated, deep + 1, parameters);
+                }
+//                parameterParser(parameterizedType.getActualTypeArguments().get(0), validated, deep + 1, parameters);
+            }
+            return;
+        }
+
+        if (!JavaTypeHelper.isPrimitive(parameterClass.getCanonicalName())) {
             List<JavaField> fields = parameterClass.getFields();
             for (JavaField field : fields) {
-                RelaxApiParameter requestParam = new RelaxApiParameter();
-                requestParam.setName(formatName(field.getName(), deep))
-                        .setType(field.getType().getName())
-                        .setDesc(field.getComment())
-                        .setRequireDesc(ValidatedUtils.required(field) ? "是" : "否")
-                        .setConstraintDesc("-")
-                        .setExample("-");
-                System.out.println(field.getAnnotations());
                 JavaClass filedClass = field.getType();
-                parameters.add(requestParam);
+                RelaxApiParameter relaxApiParameter = buildParameter(field, validated, deep);
+                parameters.add(relaxApiParameter);
                 if (!JavaTypeHelper.isPrimitive(filedClass.getName()) && !JavaTypeHelper.isCollection(filedClass.getName())) {
-                    parameterParser(filedClass, validated, deep  + 1, parameters);
+                    parameterParser(filedClass, validated, deep + 1, parameters);
                 }
             }
         }
     }
 
-    static RelaxApiParameter buildParameter(JavaParameter javaParameter) {
+    static RelaxApiParameter buildParameter(JavaParameter javaParameter, boolean validated, int deep) {
         RelaxApiParameter requestParam = new RelaxApiParameter();
-        requestParam.setName(javaParameter.getName())
+        requestParam.setName(formatName(javaParameter.getName(), deep))
                 .setType(javaParameter.getValue())
                 .setDesc(javaParameter.getComment())
                 .setRequireDesc("是")
                 .setConstraintDesc("-")
                 .setExample("-");
+        ValidatorProcessor.process(javaParameter.getJavaClass(), requestParam);
+        return requestParam;
+    }
+
+    static RelaxApiParameter buildParameter(JavaField field, boolean validated, int deep) {
+        RelaxApiParameter requestParam = new RelaxApiParameter();
+        requestParam.setName(formatName(field.getName(), deep))
+                .setType(field.getType().getSimpleName())
+                .setDesc(field.getComment())
+                .setRequireDesc("是")
+                .setConstraintDesc("-")
+                .setExample("-");
+        ValidatorProcessor.process(field.getType(), requestParam);
         return requestParam;
     }
 
     static String formatName(String name, int deep) {
-        if(deep < 1){
+        if (deep < 1) {
             return name;
         }
         StringBuilder sb = new StringBuilder();
-        for(int i = 1; i < deep; i++) {
-            sb.append("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        for (int i = 1; i < deep; i++) {
+            sb.append(depthPrefix);
         }
-        sb.append(nestedParameterPrefix).append(name);
-        System.out.println(deep + "=" + sb);
         return sb.toString();
     }
 

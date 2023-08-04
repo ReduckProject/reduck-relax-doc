@@ -53,7 +53,6 @@ public class ApiDocTemplateTest {
         Configuration cfg = Configuration.defaultConfiguration();
         cfg.add(new File("/Users/zhanjinkai/Documents/GitHub/reduck-relax-doc/src/main/resources/relax-doc-beetl.properties"));
         GroupTemplate gt = new GroupTemplate(resourceLoader, cfg);
-//获取模板
         Template t = gt.getTemplate(FileCopyUtils.copyToString(new FileReader("/Users/zhanjinkai/Documents/GitHub/reduck-relax-doc/src/main/resources/apiDoc.md")));
 
         t.binding("apiGroupList", Arrays.asList(apiGroup));
