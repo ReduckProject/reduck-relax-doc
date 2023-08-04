@@ -59,7 +59,7 @@ public class SpringMvcApiParser {
         List<RelaxApiParameter> requestParams = new ArrayList<>();
         List<JavaParameter> parameterList = javaMethod.getParameters();
         for (JavaParameter parameter : parameterList) {
-            parameterParser(parameter, Jsr380Utils.annotationWithValid(javaMethod), requestParams);
+            parameterParser(parameter, requestParams);
         }
 
         return requestParams;
@@ -72,25 +72,18 @@ public class SpringMvcApiParser {
         return responseParams;
     }
 
-    static void parameterParser(JavaClass parameterClass, boolean validated, List<RelaxApiParameter> parameters) {
-        parameterParser(parameterClass, validated, 0, parameters);
-    }
-
     static void parameterParser(JavaParameter parameterClass, List<RelaxApiParameter> parameters) {
+        boolean validated = Jsr380Utils.annotationWithValid(parameterClass);
         if (JavaTypeHelper.isPrimitive(parameterClass.getCanonicalName())) {
-            parameters.add(buildParameter(parameterClass,false,  0));
+            parameters.add(buildParameter(parameterClass, validated, 0));
         }
 
-        if (JavaTypeHelper.isCollection(parameterClass.getCanonicalName())) {
-            System.out.println();
-        }
-
-        parameterParser(parameterClass.getJavaClass(), false, 0, parameters);
+        parameterParser(parameterClass.getJavaClass(), validated, 0, parameters);
     }
 
     static void parameterParser(JavaParameter parameterClass, boolean validated, List<RelaxApiParameter> parameters) {
         if (JavaTypeHelper.isPrimitive(parameterClass.getCanonicalName())) {
-            parameters.add(buildParameter(parameterClass,validated,  0));
+            parameters.add(buildParameter(parameterClass, validated, 0));
         }
 
         if (JavaTypeHelper.isCollection(parameterClass.getCanonicalName())) {
@@ -134,7 +127,9 @@ public class SpringMvcApiParser {
                 .setRequireDesc("是")
                 .setConstraintDesc("-")
                 .setExample("-");
-        ValidatorProcessor.process(javaParameter.getJavaClass(), requestParam);
+        if (validated) {
+            ValidatorProcessor.process(javaParameter, requestParam);
+        }
         return requestParam;
     }
 
@@ -146,7 +141,9 @@ public class SpringMvcApiParser {
                 .setRequireDesc("是")
                 .setConstraintDesc("-")
                 .setExample("-");
-        ValidatorProcessor.process(field.getType(), requestParam);
+        if (validated) {
+            ValidatorProcessor.process(field, requestParam);
+        }
         return requestParam;
     }
 

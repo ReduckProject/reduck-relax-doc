@@ -2,6 +2,8 @@ package net.reduck.relexdoc.util;
 
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
+import com.thoughtworks.qdox.model.JavaParameter;
 import net.reduck.relexdoc.entity.RelaxApiParameter;
 import net.reduck.relexdoc.parse.Jsr380Processor;
 
@@ -31,10 +33,22 @@ public class ValidatorProcessor {
         }
     }
 
-    public static void process(JavaClass javaClass, RelaxApiParameter parameter){
+    public static void process(JavaField javaField, RelaxApiParameter parameter){
         for(Jsr380Processor processor : processors){
-            for(JavaAnnotation annotation : javaClass.getAnnotations()) {
-                 processor.process(javaClass, annotation, parameter);
+            for(JavaAnnotation annotation : javaField.getAnnotations()) {
+                if(processor.support(annotation)) {
+                    processor.process(javaField.getType(), annotation, parameter);
+                }
+            }
+        }
+    }
+
+    public static void process(JavaParameter javaParameter, RelaxApiParameter parameter){
+        for(Jsr380Processor processor : processors){
+            for(JavaAnnotation annotation : javaParameter.getAnnotations()) {
+                if(processor.support(annotation)) {
+                    processor.process(javaParameter.getJavaClass(), annotation, parameter);
+                }
             }
         }
     }

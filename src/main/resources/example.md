@@ -21,18 +21,18 @@
 | 参数名称 | 类型  | 必选  | 约束  | 描述  | 示例  |
 |------|-----|-----|-----|-----|-----|
 |name|String|是|-|名称|-|
-|desc|String|是|-||-|
+|desc|String|是|长度: 0 ~ 100||-|
 |password|String|是|-|密码<br>长度 8 - 20|-|
-|sub|SubTO|是|长度: null ~ null||-|
+|sub|SubTO|是|-||-|
 ||String|是|-||-|
 ||int|是|-||-|
-||ChildTO|是|长度: null ~ null||-|
+||ChildTO|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
 |subTOList|List|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|ChildTO|是|长度: null ~ null||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|ChildTO|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
 
@@ -42,16 +42,16 @@
 |name|String|是|-|名称|-|
 |desc|String|是|-||-|
 |password|String|是|-|密码<br>长度 8 - 20|-|
-|sub|SubTO|是|长度: null ~ null||-|
+|sub|SubTO|是|-||-|
 ||String|是|-||-|
 ||int|是|-||-|
-||ChildTO|是|长度: null ~ null||-|
+||ChildTO|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
 |subTOList|List|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|ChildTO|是|长度: null ~ null||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|ChildTO|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
 
@@ -64,16 +64,16 @@
 |name|String|是|-|名称|-|
 |desc|String|是|-||-|
 |password|String|是|-|密码<br>长度 8 - 20|-|
-|sub|SubTO|是|长度: null ~ null||-|
+|sub|SubTO|是|-||-|
 ||String|是|-||-|
 ||int|是|-||-|
-||ChildTO|是|长度: null ~ null||-|
+||ChildTO|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
 |subTOList|List|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|ChildTO|是|长度: null ~ null||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|ChildTO|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
 
@@ -83,15 +83,15 @@
 |name|String|是|-|名称|-|
 |desc|String|是|-||-|
 |password|String|是|-|密码<br>长度 8 - 20|-|
-|sub|SubTO|是|长度: null ~ null||-|
+|sub|SubTO|是|-||-|
 ||String|是|-||-|
 ||int|是|-||-|
-||ChildTO|是|长度: null ~ null||-|
+||ChildTO|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
 |subTOList|List|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|ChildTO|是|长度: null ~ null||-|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|ChildTO|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|String|是|-||-|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|int|是|-||-|

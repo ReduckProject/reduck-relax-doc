@@ -2,7 +2,6 @@ package net.reduck.relexdoc.parse;
 
 import com.thoughtworks.qdox.model.JavaAnnotation;
 import com.thoughtworks.qdox.model.JavaClass;
-import com.thoughtworks.qdox.model.JavaField;
 import net.reduck.relexdoc.entity.RelaxApiParameter;
 
 /**
@@ -16,12 +15,19 @@ public class SizeProcessor implements Jsr380Processor {
     @Override
     public boolean process(JavaClass javaClass, JavaAnnotation javaAnnotation, RelaxApiParameter parameter) {
         JavaClass annotationClass = javaAnnotation.getType();
-        parameter.setConstraintDesc("长度: " + javaAnnotation.getProperty("min") + " ~ " + javaAnnotation.getProperty("max"));
+        parameter.setConstraintDesc(getDesc(javaAnnotation));
         return true;
     }
 
     @Override
     public boolean support(JavaAnnotation javaAnnotation) {
         return javaAnnotation.getType().getName().endsWith(annotationName);
+    }
+
+    private String getDesc(JavaAnnotation size) {
+        return "长度: "
+                + (size.getProperty("min") == null  ? 0 : size.getProperty("min"))
+                + " ~ "
+                + (size.getProperty("max") == null  ? 0x7fffffff : size.getProperty("max"));
     }
 }
