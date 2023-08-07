@@ -136,7 +136,7 @@ public class SpringMvcApiParser {
     static RelaxApiParameter buildParameter(JavaField field, boolean validated, int deep) {
         RelaxApiParameter requestParam = new RelaxApiParameter();
         requestParam.setName(formatName(field.getName(), deep))
-                .setType(field.getType().getSimpleName())
+                .setType(getSimpleName(field.getType().getSimpleName()))
                 .setDesc(field.getComment())
                 .setRequireDesc("是")
                 .setConstraintDesc("-")
@@ -144,6 +144,8 @@ public class SpringMvcApiParser {
         if (validated) {
             ValidatorProcessor.process(field, requestParam);
         }
+        System.out.println(field.getType().getSimpleName() + "|" + field.getType().getCanonicalName());
+
         return requestParam;
     }
 
@@ -156,6 +158,10 @@ public class SpringMvcApiParser {
             sb.append(depthPrefix);
         }
         return sb.toString();
+    }
+
+    static String getSimpleName(String name) {
+        return name.contains(".") ? name.substring(name.lastIndexOf(".") + 1) : name;
     }
 
 }

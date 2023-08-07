@@ -2,7 +2,6 @@ package net.reduck.relexdoc.util;
 
 import com.thoughtworks.qdox.model.JavaAnnotatedElement;
 import com.thoughtworks.qdox.model.JavaAnnotation;
-import com.thoughtworks.qdox.model.JavaMethod;
 
 import java.util.List;
 
