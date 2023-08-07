@@ -1,6 +1,6 @@
 package net.reduck.relexdoc.util;
 
-import net.reduck.relexdoc.parse.Jsr380Processor;
+import net.reduck.relexdoc.parse.Jsr380Translator;
 
 import java.io.File;
 import java.io.IOException;
@@ -77,7 +77,7 @@ public class InterfaceImplementHelper {
     }
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        List<Class<Jsr380Processor>> implementations = findImplementationsOfInterface(Jsr380Processor.class);
+        List<Class<Jsr380Translator>> implementations = findImplementationsOfInterface(Jsr380Translator.class);
         for (Class<?> clazz : implementations) {
             System.out.println("Class name: " + clazz.getName());
         }

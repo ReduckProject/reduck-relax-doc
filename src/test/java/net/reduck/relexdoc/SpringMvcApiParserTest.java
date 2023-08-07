@@ -27,7 +27,8 @@ public class SpringMvcApiParserTest {
     @Test
     public void testParser() throws IOException {
         JavaProjectBuilder builder = new JavaProjectBuilder();
-        ProjectBuilderLoader.load(builder, new File("/Users/zhanjinkai/Documents/Gitee/x-www-form-urlencoded/src/main/java/com/example/xwwwformurlencoded"));
+//        ProjectBuilderLoader.load(builder, new File("/Users/zhanjinkai/Documents/Gitee/x-www-form-urlencoded/src/main/java/com/example/xwwwformurlencoded"));
+        ProjectBuilderLoader.load(builder, new File("/Volumes/T7/macos_back/workspace/dsm/frontend/src/main/java/com/secsmart/dsm/frontend"));
 
         List<RelaxApiGroup> apiGroups = new ArrayList<>();
         for (JavaClass javaClass : builder.getClasses()) {
