@@ -112,7 +112,8 @@ public class SpringMvcApiParser {
                 JavaClass filedClass = field.getType();
                 RelaxApiParameter relaxApiParameter = buildParameter(field, validated, deep);
                 parameters.add(relaxApiParameter);
-                if (!JavaTypeHelper.isPrimitive(filedClass.getName()) && !JavaTypeHelper.isCollection(filedClass.getName())) {
+
+                if (!filedClass.isEnum() && !JavaTypeHelper.isPrimitive(filedClass.getName()) && !JavaTypeHelper.isCollection(filedClass.getName())) {
                     parameterParser(filedClass, validated, deep + 1, parameters);
                 }
             }
@@ -144,7 +145,8 @@ public class SpringMvcApiParser {
         if (validated) {
             ValidatorProcessor.process(field, requestParam);
         }
-        System.out.println(field.getType().getSimpleName() + "|" + field.getType().getCanonicalName());
+
+//        System.out.println(field.getType().getSimpleName() + "|" + field.getType().getCanonicalName());
 
         return requestParam;
     }
@@ -157,6 +159,8 @@ public class SpringMvcApiParser {
         for (int i = 1; i < deep; i++) {
             sb.append(depthPrefix);
         }
+
+        sb.append(nestedParameterPrefix).append(name);
         return sb.toString();
     }
 
