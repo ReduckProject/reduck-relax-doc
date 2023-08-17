@@ -39,7 +39,7 @@ public class SpringMvcApiParser {
                 return annotation.getProperty("method") == null
                         ? "GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE"
                         : annotation.getProperty("method").toString()
-                        .replaceAll("\\{|}|RequestMethod", "");
+                        .replaceAll("\\{|}|RequestMethod\\.", "");
 
             case "PostMapping":
                 return "POST";
