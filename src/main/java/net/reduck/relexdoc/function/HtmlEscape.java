@@ -18,11 +18,12 @@ public class HtmlEscape implements Function {
         // 将换行替换成<br>
         return para0.toString()
                 .replaceAll("\n|\r\n|\r", "<br>")
+                // 必须先进行替换
+                .replaceAll("&", "&amp;")
                 .replaceAll(" ", "&nbsp;")
                 .replaceAll("\"", "&quot;")
                 .replaceAll("<", "&lt;")
                 .replaceAll(">", "&gt;")
-                .replaceAll("&", "&amp;")
                 ;
     }
 
