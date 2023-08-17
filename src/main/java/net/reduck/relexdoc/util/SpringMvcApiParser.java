@@ -123,7 +123,7 @@ public class SpringMvcApiParser {
     static RelaxApiParameter buildParameter(JavaParameter javaParameter, boolean validated, int deep) {
         RelaxApiParameter requestParam = new RelaxApiParameter();
         requestParam.setName(formatName(javaParameter.getName(), deep))
-                .setType(javaParameter.getValue())
+                .setType(obtainCanonicalTypeName(javaParameter.getJavaClass()))
                 .setDesc(javaParameter.getComment())
                 .setRequireDesc("是")
                 .setConstraintDesc("-")
@@ -137,7 +137,7 @@ public class SpringMvcApiParser {
     static RelaxApiParameter buildParameter(JavaField field, boolean validated, int deep) {
         RelaxApiParameter requestParam = new RelaxApiParameter();
         requestParam.setName(formatName(field.getName(), deep))
-                .setType(getSimpleName(field.getType().getSimpleName()))
+                .setType(obtainCanonicalTypeName(field.getType()))
                 .setDesc(field.getComment())
                 .setRequireDesc("是")
                 .setConstraintDesc("-")
@@ -162,6 +162,28 @@ public class SpringMvcApiParser {
 
         sb.append(nestedParameterPrefix).append(name);
         return sb.toString();
+    }
+
+    static String obtainCanonicalTypeName(JavaClass javaClass) {
+        String typeName = getSimpleName(javaClass.getSimpleName());
+        if (javaClass.isEnum()) {
+            return "Enum<" + typeName + ">";
+        }
+
+        if (JavaTypeHelper.isPrimitive(javaClass.getName())) {
+            return typeName;
+        }
+
+        if (JavaTypeHelper.isCollection(javaClass.getName())) {
+            if (javaClass instanceof JavaParameterizedType) {
+                JavaType javaType = ((JavaParameterizedType) javaClass).getActualTypeArguments().get(0);
+
+                return "List<" + javaType.getValue() + ">";
+            }
+        }
+
+        return "Object<" + typeName + ">";
+
     }
 
     static String getSimpleName(String name) {
