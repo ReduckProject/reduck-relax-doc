@@ -30,7 +30,7 @@ if(isNotEmpty(requestParams)){
 for(requestParam in requestParams){
 %>
 |${htmlSpaceEscape(requestParam.name)}|${htmlEscape(requestParam.type)}|${requestParam.requireDesc}|${htmlLineSeparatorEscape(
-requestParam.constraintDesc)}|${htmlLineSeparatorEscape(requestParam.desc)}|${htmlLineSeparatorEscape(
+requestParam.constraintDesc)}|${emptyPlaceholder(htmlLineSeparatorEscape(requestParam.desc))}|${htmlLineSeparatorEscape(
 requestParam.example)}|
 <% } %>
 <% } else {%>
@@ -48,8 +48,8 @@ if(isNotEmpty(responseParams)) {
 <%
 for(responseParam in responseParams){
 %>
-|${htmlSpaceEscape(responseParam.name)}|${htmlEscape(responseParam.type)}|${responseParam.requireDesc}|${htmlLineSeparatorEscape(
-responseParam.desc)}|${htmlLineSeparatorEscape(responseParam.example)}|
+|${htmlSpaceEscape(responseParam.name)}|${htmlEscape(responseParam.type)}|${responseParam.requireDesc}|${emptyPlaceholder(htmlLineSeparatorEscape(
+responseParam.desc))}|${htmlLineSeparatorEscape(responseParam.example)}|
 <% } %>
 <% } else {%>
 

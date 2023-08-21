@@ -131,6 +131,19 @@ public class SpringMvcApiParser {
         if (validated) {
             ValidatorProcessor.process(javaParameter, requestParam);
         }
+
+        if (javaParameter.getJavaClass().isEnum()) {
+            StringBuilder exampleBuilder = new StringBuilder();
+            List<JavaField> fields = javaParameter.getJavaClass().getFields();
+            for (JavaField enumField : fields) {
+                if (enumField.isEnumConstant()) {
+                    exampleBuilder.append("\n").append(enumField.getName());
+                }
+            }
+            if (exampleBuilder.length() > 0) {
+                requestParam.setExample(exampleBuilder.substring(1));
+            }
+        }
         return requestParam;
     }
 
@@ -140,8 +153,21 @@ public class SpringMvcApiParser {
                 .setType(obtainCanonicalTypeName(field.getType()))
                 .setDesc(field.getComment())
                 .setRequireDesc("是")
-                .setConstraintDesc("-")
-                .setExample("-");
+                .setConstraintDesc("-");
+
+        if (field.getType().isEnum()) {
+            StringBuilder exampleBuilder = new StringBuilder();
+            List<JavaField> fields = field.getType().getFields();
+            for (JavaField enumField : fields) {
+                if (enumField.isEnumConstant()) {
+                    exampleBuilder.append("\n").append(enumField.getName());
+                }
+            }
+            if (exampleBuilder.length() > 0) {
+                requestParam.setExample(exampleBuilder.substring(1));
+            }
+        }
+
         if (validated) {
             ValidatorProcessor.process(field, requestParam);
         }
@@ -170,11 +196,11 @@ public class SpringMvcApiParser {
             return "Enum<" + typeName + ">";
         }
 
-        if (JavaTypeHelper.isPrimitive(javaClass.getName())) {
+        if (JavaTypeHelper.isPrimitive(javaClass.getCanonicalName())) {
             return typeName;
         }
 
-        if (JavaTypeHelper.isCollection(javaClass.getName())) {
+        if (JavaTypeHelper.isCollection(javaClass.getCanonicalName())) {
             if (javaClass instanceof JavaParameterizedType) {
                 JavaType javaType = ((JavaParameterizedType) javaClass).getActualTypeArguments().get(0);
 
